@@ -1,5 +1,6 @@
 package yatzy;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
@@ -83,22 +84,20 @@ public class Yatzy {
 ;
     public static int smallStraight(Roll roll) {
 
-        int[] counts = roll.getCounts();
+        boolean isSmallStraight = new HashSet<>(roll.counts()
+                .keySet())
+                .containsAll(List.of(1, 2, 3, 4, 5));
 
-        if (counts[0] == 1 && counts[1] == 1 && counts[2] == 1 && counts[3] == 1 && counts[4] == 1) {
-            return 15;
-        }
-        return 0;
+        return isSmallStraight ? 15 : 0;
+
     }
 
     public static int largeStraight(Roll roll) {
-        int[] counts = roll.getCounts();
+        boolean isSmallStraight = new HashSet<>(roll.counts()
+                .keySet())
+                .containsAll(List.of(2, 3, 4, 5, 6));
 
-        if (counts[1] == 1 && counts[2] == 1 && counts[3] == 1 && counts[4] == 1 && counts[5] == 1) {
-            return 20;
-        }
-
-        return 0;
+        return isSmallStraight ? 20 : 0;
     }
 
     public static int fullHouse(Roll roll) {
