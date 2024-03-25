@@ -6,7 +6,7 @@ import java.util.stream.IntStream;
 public class Yatzy {
 
     public static int chance(int d1, int d2, int d3, int d4, int d5) {
-        return d1 + d2 + d3 + d4 + d5;
+        return sumDiceValues(d1, d2, d3, d4, d5);
     }
 
     public static int yatzy(int d1, int d2, int d3, int d4, int d5) {
@@ -47,6 +47,10 @@ public class Yatzy {
 
     public static int sixes(int d1, int d2, int d3, int d4, int d5) {
         return sumDiceValuesWhen(d1, d2, d3, d4, d5, die -> die == 6);
+    }
+
+    private static int sumDiceValues(int d1, int d2, int d3, int d4, int d5) {
+        return sumDiceValuesWhen(d1, d2, d3, d4, d5, die -> true);
     }
 
     private static int sumDiceValuesWhen(int d1, int d2, int d3, int d4, int d5, IntPredicate condition) {
