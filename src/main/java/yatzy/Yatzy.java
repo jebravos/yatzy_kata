@@ -6,6 +6,15 @@ public class Yatzy {
         return roll.sumDiceValues();
     }
 
+    public static int yatzy(Roll roll) {
+        return roll.counts()
+                .entrySet()
+                .stream()
+                .filter(entry -> entry.getValue() == 5)
+                .findAny()
+                .map(entry -> 50)
+                .orElse(0);
+    }
 
     public static int ones(Roll roll) {
         return roll.sumDiceValuesWhen(die -> die == 1);
@@ -44,17 +53,6 @@ public class Yatzy {
         return 0;
     }
 
-    public static int yatzy(Roll roll) {
-        int[] counts = roll.getCounts();
-
-        for (int at = 0; at < 6; at++) {
-
-            if (counts[at] == 5) {
-                return 50;
-            }
-        }
-        return 0;
-    }
 
     public static int twoPairs(Roll roll) {
         int[] counts = roll.getCounts();
@@ -62,7 +60,7 @@ public class Yatzy {
         int numberOfPairs = 0;
         int score = 0;
 
-        for (int at = 0; at < 6; at++){
+        for (int at = 0; at < 6; at++) {
             if (counts[6 - at - 1] >= 2) {
                 numberOfPairs++;
                 score += (6 - at);
@@ -77,25 +75,23 @@ public class Yatzy {
     }
 
     public static int threeOfAKind(Roll roll) {
-        int[] counts = roll.getCounts();
-
-        for (int at = 0; at < 6; at++) {
-            if (counts[at] >= 3) {
-                return (at + 1) * 3;
-            }
-        }
-        return 0;
+        return roll.counts()
+                .entrySet()
+                .stream()
+                .filter(entry -> entry.getValue() >= 3)
+                .mapToInt(entry -> entry.getKey() * 3)
+                .max()
+                .orElse(0);
     }
 
     public static int fourOfAKind(Roll roll) {
-        int[] counts = roll.getCounts();
-
-        for (int at = 0; at < 6; at++) {
-            if (counts[at] >= 4) {
-                return (at + 1) * 4;
-            }
-        }
-        return 0;
+        return roll.counts()
+                .entrySet()
+                .stream()
+                .filter(entry -> entry.getValue() >= 4)
+                .mapToInt(entry -> entry.getKey() * 4)
+                .max()
+                .orElse(0);
     }
 
     public static int smallStraight(Roll roll) {
