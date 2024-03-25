@@ -5,64 +5,40 @@ import java.util.stream.IntStream;
 
 public class Yatzy {
 
-    public static int chance(int d1, int d2, int d3, int d4, int d5) {
-        return sumDiceValues(d1, d2, d3, d4, d5);
+    public static int chance(Roll roll) {
+        return sumDiceValues(roll.d1(), roll.d2(), roll.d3(), roll.d4(), roll.d5());
     }
 
-    public static int yatzy(int d1, int d2, int d3, int d4, int d5) {
-        int[] dice = new int[5];
-        dice[0] = d1;
-        dice[1] = d2;
-        dice[2] = d3;
-        dice[3] = d4;
-        dice[4] = d5;
 
-        int[] counts = new int[6];
-        for (int die : dice)
-            counts[die - 1]++;
-        for (int i = 0; i != 6; i++)
-            if (counts[i] == 5) return 50;
-        return 0;
+    public static int ones(Roll roll) {
+        return sumDiceValuesWhen(roll.d1(), roll.d2(), roll.d3(), roll.d4(), roll.d5(), die -> die == 1);
     }
 
-    public static int ones(int d1, int d2, int d3, int d4, int d5) {
-        return sumDiceValuesWhen(d1, d2, d3, d4, d5, die -> die == 1);
+    public static int twos(Roll roll) {
+        return sumDiceValuesWhen(roll.d1(), roll.d2(), roll.d3(), roll.d4(), roll.d5(), die -> die == 2);
     }
 
-    public static int twos(int d1, int d2, int d3, int d4, int d5) {
-        return sumDiceValuesWhen(d1, d2, d3, d4, d5, die -> die == 2);
+    public static int threes(Roll roll) {
+        return sumDiceValuesWhen(roll.d1(), roll.d2(), roll.d3(), roll.d4(), roll.d5(), die -> die == 3);
     }
 
-    public static int threes(int d1, int d2, int d3, int d4, int d5) {
-        return sumDiceValuesWhen(d1, d2, d3, d4, d5, die -> die == 3);
+    public static int fours(Roll roll) {
+        return sumDiceValuesWhen(roll.d1(), roll.d2(), roll.d3(), roll.d4(), roll.d5(), die -> die == 4);
     }
 
-    public static int fours(int d1, int d2, int d3, int d4, int d5) {
-        return sumDiceValuesWhen(d1, d2, d3, d4, d5, die -> die == 4);
+    public static int fives(Roll roll) {
+        return sumDiceValuesWhen(roll.d1(), roll.d2(), roll.d3(), roll.d4(), roll.d5(), die -> die == 5);
     }
 
-    public static int fives(int d1, int d2, int d3, int d4, int d5) {
-        return sumDiceValuesWhen(d1, d2, d3, d4, d5, die -> die == 5);
+    public static int sixes(Roll roll) {
+        return sumDiceValuesWhen(roll.d1(), roll.d2(), roll.d3(), roll.d4(), roll.d5(), die -> die == 6);
     }
 
-    public static int sixes(int d1, int d2, int d3, int d4, int d5) {
-        return sumDiceValuesWhen(d1, d2, d3, d4, d5, die -> die == 6);
-    }
+    public static int pair(Roll roll) {
+        int[] counts = getCounts(roll.d1(), roll.d2(), roll.d3(), roll.d4(), roll.d5());
 
-    private static int sumDiceValues(int d1, int d2, int d3, int d4, int d5) {
-        return sumDiceValuesWhen(d1, d2, d3, d4, d5, die -> true);
-    }
+        for (int at = 0; at < 6; at++) {
 
-    private static int sumDiceValuesWhen(int d1, int d2, int d3, int d4, int d5, IntPredicate condition) {
-        return IntStream.of(d1, d2, d3, d4, d5)
-                .filter(condition)
-                .sum();
-    }
-
-    public static int pair(int d1, int d2, int d3, int d4, int d5) {
-        int[] counts = getCounts(d1, d2, d3, d4, d5);
-
-        for (int at = 0; at != 6; at++) {
             if (counts[6 - at - 1] >= 2) {
                 return (6 - at) * 2;
             }
@@ -71,44 +47,62 @@ public class Yatzy {
         return 0;
     }
 
-    public static int twoPairs(int d1, int d2, int d3, int d4, int d5) {
-        int[] counts = getCounts(d1, d2, d3, d4, d5);
+    public static int yatzy(Roll roll) {
+        int[] counts = getCounts(roll.d1(), roll.d2(), roll.d3(), roll.d4(), roll.d5());
 
-        int n = 0;
+        for (int at = 0; at < 6; at++) {
+
+            if (counts[at] == 5) {
+                return 50;
+            }
+        }
+        return 0;
+    }
+
+    public static int twoPairs(Roll roll) {
+        int[] counts = getCounts(roll.d1(), roll.d2(), roll.d3(), roll.d4(), roll.d5());
+
+        int numberOfPairs = 0;
         int score = 0;
-        for (int i = 0; i < 6; i += 1)
-            if (counts[6 - i - 1] >= 2) {
-                n++;
-                score += (6 - i);
+
+        for (int at = 0; at < 6; at++){
+            if (counts[6 - at - 1] >= 2) {
+                numberOfPairs++;
+                score += (6 - at);
             }
-        if (n == 2) return score * 2;
-        else return 0;
+        }
+
+        if (numberOfPairs == 2) {
+            return score * 2;
+        } else {
+            return 0;
+        }
     }
 
-    public static int threeOfAKind(int d1, int d2, int d3, int d4, int d5) {
-        int[] counts = getCounts(d1, d2, d3, d4, d5);
+    public static int threeOfAKind(Roll roll) {
+        int[] counts = getCounts(roll.d1(), roll.d2(), roll.d3(), roll.d4(), roll.d5());
 
-        for (int i = 0; i < 6; i++) {
-            if (counts[i] >= 3) {
-                return (i + 1) * 3;
+        for (int at = 0; at < 6; at++) {
+            if (counts[at] >= 3) {
+                return (at + 1) * 3;
             }
         }
         return 0;
     }
 
-    public static int fourOfAKind(int d1, int d2, int d3, int d4, int d5) {
-        int[] counts = getCounts(d1, d2, d3, d4, d5);
+    public static int fourOfAKind(Roll roll) {
+        int[] counts = getCounts(roll.d1(), roll.d2(), roll.d3(), roll.d4(), roll.d5());
 
-        for (int i = 0; i < 6; i++){
-            if (counts[i] >= 4) {
-                return (i + 1) * 4;
+        for (int at = 0; at < 6; at++) {
+            if (counts[at] >= 4) {
+                return (at + 1) * 4;
             }
         }
         return 0;
     }
 
-    public static int smallStraight(int d1, int d2, int d3, int d4, int d5) {
-        int[] counts = getCounts(d1, d2, d3, d4, d5);
+    public static int smallStraight(Roll roll) {
+        int[] counts = getCounts(roll.d1(), roll.d2(), roll.d3(), roll.d4(), roll.d5());
 
         if (counts[0] == 1 && counts[1] == 1 && counts[2] == 1 && counts[3] == 1 && counts[4] == 1) {
             return 15;
@@ -116,8 +110,8 @@ public class Yatzy {
         return 0;
     }
 
-    public static int largeStraight(int d1, int d2, int d3, int d4, int d5) {
-        int[] counts = getCounts(d1, d2, d3, d4, d5);
+    public static int largeStraight(Roll roll) {
+        int[] counts = getCounts(roll.d1(), roll.d2(), roll.d3(), roll.d4(), roll.d5());
 
         if (counts[1] == 1 && counts[2] == 1 && counts[3] == 1 && counts[4] == 1 && counts[5] == 1) {
             return 20;
@@ -126,8 +120,8 @@ public class Yatzy {
         return 0;
     }
 
-    public static int fullHouse(int d1, int d2, int d3, int d4, int d5) {
-        int[] counts = getCounts(d1, d2, d3, d4, d5);
+    public static int fullHouse(Roll roll) {
+        int[] counts = getCounts(roll.d1(), roll.d2(), roll.d3(), roll.d4(), roll.d5());
 
 
         boolean _2 = false;
@@ -135,7 +129,6 @@ public class Yatzy {
         int _2_at = 0;
         boolean _3 = false;
         int _3_at = 0;
-
 
 
         for (i = 0; i != 6; i += 1)
@@ -163,4 +156,15 @@ public class Yatzy {
         counts[d5 - 1]++;
         return counts;
     }
+
+    private static int sumDiceValues(int d1, int d2, int d3, int d4, int d5) {
+        return sumDiceValuesWhen(d1, d2, d3, d4, d5, die -> true);
+    }
+
+    private static int sumDiceValuesWhen(int d1, int d2, int d3, int d4, int d5, IntPredicate condition) {
+        return IntStream.of(d1, d2, d3, d4, d5)
+                .filter(condition)
+                .sum();
+    }
+
 }
