@@ -41,16 +41,13 @@ public class Yatzy {
     }
 
     public static int pair(Roll roll) {
-        int[] counts = roll.getCounts();
-
-        for (int at = 0; at < 6; at++) {
-
-            if (counts[6 - at - 1] >= 2) {
-                return (6 - at) * 2;
-            }
-        }
-
-        return 0;
+        return roll.counts()
+                .entrySet()
+                .stream()
+                .filter(entry -> entry.getValue() >= 2)
+                .mapToInt(entry -> entry.getKey() * 2)
+                .max()
+                .orElse(0);
     }
 
 
