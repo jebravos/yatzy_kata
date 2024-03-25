@@ -34,6 +34,18 @@ public class Yatzy {
         return sumDicesValues(d1, d2, d3, d4, d5, 3);
     }
 
+    public static int fours(int d1, int d2, int d3, int d4, int d5) {
+        return sumDiceValues2(d1, d2, d3, d4, d5, 4);
+    }
+
+    public static int fives(int d1, int d2, int d3, int d4, int d5) {
+        return sumDiceValues2(d1, d2, d3, d4, d5, 5);
+    }
+
+    public static int sixes(int d1, int d2, int d3, int d4, int d5) {
+        return sumDiceValues2(d1, d2, d3, d4, d5, 6);
+    }
+
     private static int sumDicesValues(int d1, int d2, int d3, int d4, int d5, int requiredNumber) {
         int sum = 0;
         if (d1 == requiredNumber) sum+= requiredNumber;
@@ -45,40 +57,7 @@ public class Yatzy {
         return sum;
     }
 
-    public static int fours(int d1, int d2, int d3, int d4, int d5) {
-        int[] dice = new int[5];
-        dice[0] = d1;
-        dice[1] = d2;
-        dice[2] = d3;
-        dice[3] = d4;
-        dice[4] = d5;
-
-        int sum;
-        sum = 0;
-        for (int at = 0; at != 5; at++) {
-            if (dice[at] == 4) {
-                sum += 4;
-            }
-        }
-        return sum;
-    }
-
-    public static int fives(int d1, int d2, int d3, int d4, int d5) {
-        int[] dice = new int[5];
-        dice[0] = d1;
-        dice[1] = d2;
-        dice[2] = d3;
-        dice[3] = d4;
-        dice[4] = d5;
-
-        int s = 0;
-        int i;
-        for (i = 0; i < dice.length; i++)
-            if (dice[i] == 5) s = s + 5;
-        return s;
-    }
-
-    public static int sixes(int d1, int d2, int d3, int d4, int d5) {
+    private static int sumDiceValues2(int d1, int d2, int d3, int d4, int d5, int requiredNumber) {
         int[] dice = new int[5];
         dice[0] = d1;
         dice[1] = d2;
@@ -87,8 +66,10 @@ public class Yatzy {
         dice[4] = d5;
 
         int sum = 0;
-        for (int at = 0; at < dice.length; at++) {
-            if (dice[at] == 6) sum = sum + 6;
+        for (int i = 0; i < dice.length; i++) {
+            if (dice[i] == requiredNumber) {
+                sum += requiredNumber;
+            }
         }
         return sum;
     }
