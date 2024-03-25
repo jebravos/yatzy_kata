@@ -1,5 +1,8 @@
 package yatzy;
 
+import java.util.List;
+import java.util.Map;
+
 public class Yatzy {
 
     public static int chance(Roll roll) {
@@ -52,20 +55,17 @@ public class Yatzy {
 
 
     public static int twoPairs(Roll roll) {
-        int[] counts = roll.getCounts();
+        List<Map.Entry<Integer, Long>> pairs = roll.counts()
+                .entrySet()
+                .stream()
+                .filter(entry -> entry.getValue() >= 2)
+                .toList();
 
-        int numberOfPairs = 0;
-        int score = 0;
+        if (pairs.size() == 2) {
+            return pairs.stream()
+                    .map(entry -> entry.getKey() * 2)
+                    .reduce(0, Integer::sum);
 
-        for (int at = 0; at < 6; at++) {
-            if (counts[6 - at - 1] >= 2) {
-                numberOfPairs++;
-                score += (6 - at);
-            }
-        }
-
-        if (numberOfPairs == 2) {
-            return score * 2;
         } else {
             return 0;
         }
