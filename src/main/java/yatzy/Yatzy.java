@@ -1,5 +1,8 @@
 package yatzy;
 
+import java.util.function.IntPredicate;
+import java.util.stream.IntStream;
+
 public class Yatzy {
 
     public static int chance(int d1, int d2, int d3, int d4, int d5) {
@@ -23,55 +26,33 @@ public class Yatzy {
     }
 
     public static int ones(int d1, int d2, int d3, int d4, int d5) {
-        return sumDicesValues(d1, d2, d3, d4, d5, 1);
+        return sumDiceValuesWhen(d1, d2, d3, d4, d5, die -> die == 1);
     }
 
     public static int twos(int d1, int d2, int d3, int d4, int d5) {
-        return sumDicesValues(d1, d2, d3, d4, d5, 2);
+        return sumDiceValuesWhen(d1, d2, d3, d4, d5, die -> die == 2);
     }
 
     public static int threes(int d1, int d2, int d3, int d4, int d5) {
-        return sumDicesValues(d1, d2, d3, d4, d5, 3);
+        return sumDiceValuesWhen(d1, d2, d3, d4, d5, die -> die == 3);
     }
 
     public static int fours(int d1, int d2, int d3, int d4, int d5) {
-        return sumDiceValues2(d1, d2, d3, d4, d5, 4);
+        return sumDiceValuesWhen(d1, d2, d3, d4, d5, die -> die == 4);
     }
 
     public static int fives(int d1, int d2, int d3, int d4, int d5) {
-        return sumDiceValues2(d1, d2, d3, d4, d5, 5);
+        return sumDiceValuesWhen(d1, d2, d3, d4, d5, die -> die == 5);
     }
 
     public static int sixes(int d1, int d2, int d3, int d4, int d5) {
-        return sumDiceValues2(d1, d2, d3, d4, d5, 6);
+        return sumDiceValuesWhen(d1, d2, d3, d4, d5, die -> die == 6);
     }
 
-    private static int sumDicesValues(int d1, int d2, int d3, int d4, int d5, int requiredNumber) {
-        int sum = 0;
-        if (d1 == requiredNumber) sum+= requiredNumber;
-        if (d2 == requiredNumber) sum+= requiredNumber;
-        if (d3 == requiredNumber) sum+= requiredNumber;
-        if (d4 == requiredNumber) sum+= requiredNumber;
-        if (d5 == requiredNumber) sum+= requiredNumber;
-
-        return sum;
-    }
-
-    private static int sumDiceValues2(int d1, int d2, int d3, int d4, int d5, int requiredNumber) {
-        int[] dice = new int[5];
-        dice[0] = d1;
-        dice[1] = d2;
-        dice[2] = d3;
-        dice[3] = d4;
-        dice[4] = d5;
-
-        int sum = 0;
-        for (int i = 0; i < dice.length; i++) {
-            if (dice[i] == requiredNumber) {
-                sum += requiredNumber;
-            }
-        }
-        return sum;
+    private static int sumDiceValuesWhen(int d1, int d2, int d3, int d4, int d5, IntPredicate condition) {
+        return IntStream.of(d1, d2, d3, d4, d5)
+                .filter(condition)
+                .sum();
     }
 
     public static int pair(int d1, int d2, int d3, int d4, int d5) {
