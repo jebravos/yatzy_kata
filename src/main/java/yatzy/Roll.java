@@ -31,4 +31,24 @@ public record Roll(int d1, int d2, int d3, int d4, int d5) {
                 .filter(condition)
                 .sum();
     }
+
+    public Stream<Integer> findPairs(){
+        return findOccurrences(2);
+    }
+
+    public Stream<Integer> findThreeOfAKind(){
+        return findOccurrences(3);
+    }
+
+    public Stream<Integer> findFourOfAKind(){
+        return findOccurrences(4);
+    }
+    private Stream<Integer> findOccurrences(int x) {
+        return this.counts()
+                .entrySet()
+                .stream()
+                .filter(entry -> entry.getValue() >= x)
+                .map(Map.Entry::getKey);
+    }
+
 }

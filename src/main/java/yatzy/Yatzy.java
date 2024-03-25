@@ -1,7 +1,8 @@
 package yatzy;
 
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
+import java.util.OptionalInt;
 
 public class Yatzy {
 
@@ -44,54 +45,44 @@ public class Yatzy {
     }
 
     public static int pair(Roll roll) {
-        return roll.counts()
-                .entrySet()
-                .stream()
-                .filter(entry -> entry.getValue() >= 2)
-                .mapToInt(entry -> entry.getKey() * 2)
+        return roll.findPairs()
+                //
+                .mapToInt(die -> die)
                 .max()
+                .stream()
+                .map(die -> die * 2)
+                .findFirst()
                 .orElse(0);
     }
 
-
     public static int twoPairs(Roll roll) {
-        List<Map.Entry<Integer, Long>> pairs = roll.counts()
-                .entrySet()
-                .stream()
-                .filter(entry -> entry.getValue() >= 2)
+        List<Integer> pairs = roll.findPairs()
                 .toList();
 
         if (pairs.size() == 2) {
             return pairs.stream()
-                    .map(entry -> entry.getKey() * 2)
-                    .reduce(0, Integer::sum);
-
+                    .mapToInt(die -> die * 2)
+                    .sum();
         } else {
             return 0;
         }
+
     }
 
     public static int threeOfAKind(Roll roll) {
-        return roll.counts()
-                .entrySet()
-                .stream()
-                .filter(entry -> entry.getValue() >= 3)
-                .mapToInt(entry -> entry.getKey() * 3)
-                .max()
-                .orElse(0);
+        return roll.findThreeOfAKind()
+                .mapToInt(die -> die * 3)
+                .findFirst().orElse(0);
     }
 
     public static int fourOfAKind(Roll roll) {
-        return roll.counts()
-                .entrySet()
-                .stream()
-                .filter(entry -> entry.getValue() >= 4)
-                .mapToInt(entry -> entry.getKey() * 4)
-                .max()
-                .orElse(0);
+        return roll.findFourOfAKind()
+                .mapToInt(die -> die * 4)
+                .findFirst().orElse(0);
     }
-
+;
     public static int smallStraight(Roll roll) {
+
         int[] counts = roll.getCounts();
 
         if (counts[0] == 1 && counts[1] == 1 && counts[2] == 1 && counts[3] == 1 && counts[4] == 1) {
@@ -111,30 +102,24 @@ public class Yatzy {
     }
 
     public static int fullHouse(Roll roll) {
-        int[] counts = roll.getCounts();
+        OptionalInt pair = roll.findPairs()
+                //
+                .mapToInt(die -> die)
+                .max()
+                .stream()
+                .findFirst();
+
+        Optional<Integer> threeOfAKind = roll.findThreeOfAKind()
+                .findAny();
 
 
-        boolean _2 = false;
-        int i;
-        int _2_at = 0;
-        boolean _3 = false;
-        int _3_at = 0;
+        if (pair.isPresent() && threeOfAKind.isPresent()) {
+            return pair.getAsInt() * 2 + threeOfAKind.get() * 3;
 
+        } else {
+            return 0;
+        }
 
-        for (i = 0; i != 6; i += 1)
-            if (counts[i] == 2) {
-                _2 = true;
-                _2_at = i + 1;
-            }
-
-        for (i = 0; i != 6; i += 1)
-            if (counts[i] == 3) {
-                _3 = true;
-                _3_at = i + 1;
-            }
-
-        if (_2 && _3) return _2_at * 2 + _3_at * 3;
-        else return 0;
     }
 
 }
