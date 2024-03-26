@@ -1,5 +1,7 @@
 package yatzy;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
@@ -46,6 +48,18 @@ public record Roll(int d1, int d2, int d3, int d4, int d5) {
                 .stream()
                 .filter(entry -> entry.getValue() >= x)
                 .map(Map.Entry::getKey);
+    }
+
+    public boolean isSmallStraight() {
+        return new HashSet<>(this.counts()
+                .keySet())
+                .containsAll(List.of(1, 2, 3, 4, 5));
+    }
+
+    public boolean isLargeStraight() {
+        return new HashSet<>(this.counts()
+                .keySet())
+                .containsAll(List.of(2, 3, 4, 5, 6));
     }
 
 }

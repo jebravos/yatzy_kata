@@ -80,21 +80,16 @@ public class ScoringRules {
 
     public static int smallStraight(Roll roll) {
 
-        boolean isSmallStraight = new HashSet<>(roll.counts()
-                .keySet())
-                .containsAll(List.of(1, 2, 3, 4, 5));
-
-        return isSmallStraight ? 15 : 0;
+        return roll.isSmallStraight() ? 15 : 0;
 
     }
+
 
     public static int largeStraight(Roll roll) {
-        boolean isLargeStraight = new HashSet<>(roll.counts()
-                .keySet())
-                .containsAll(List.of(2, 3, 4, 5, 6));
-
-        return isLargeStraight ? 20 : 0;
+        return roll.isLargeStraight() ? 20 : 0;
     }
+
+
 
     public static int fullHouse(Roll roll) {
         Optional<Integer> pair = roll.findHighestPair()
