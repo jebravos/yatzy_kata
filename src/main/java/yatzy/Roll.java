@@ -1,6 +1,7 @@
 package yatzy;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.IntPredicate;
 import java.util.stream.Collectors;
@@ -21,6 +22,11 @@ public record Roll(int d1, int d2, int d3, int d4, int d5) {
         return IntStream.of(d1, d2, d3, d4, d5)
                 .filter(condition)
                 .sum();
+    }
+
+    public Optional<Integer> findHighestPair() {
+        return this.findPairs()
+                .reduce(Integer::max);
     }
 
     public Stream<Integer> findPairs(){

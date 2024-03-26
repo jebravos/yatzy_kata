@@ -3,9 +3,8 @@ package yatzy;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.OptionalInt;
 
-public class Yatzy {
+public class ScoringRules {
 
     public static int chance(Roll roll) {
         return roll.sumDiceValues();
@@ -46,10 +45,7 @@ public class Yatzy {
     }
 
     public static int pair(Roll roll) {
-        return roll.findPairs()
-                //
-                .mapToInt(die -> die)
-                .max()
+        return roll.findHighestPair()
                 .stream()
                 .map(die -> die * 2)
                 .findFirst()
@@ -81,7 +77,7 @@ public class Yatzy {
                 .mapToInt(die -> die * 4)
                 .findFirst().orElse(0);
     }
-;
+
     public static int smallStraight(Roll roll) {
 
         boolean isSmallStraight = new HashSet<>(roll.counts()
@@ -93,18 +89,15 @@ public class Yatzy {
     }
 
     public static int largeStraight(Roll roll) {
-        boolean isSmallStraight = new HashSet<>(roll.counts()
+        boolean isLargeStraight = new HashSet<>(roll.counts()
                 .keySet())
                 .containsAll(List.of(2, 3, 4, 5, 6));
 
-        return isSmallStraight ? 20 : 0;
+        return isLargeStraight ? 20 : 0;
     }
 
     public static int fullHouse(Roll roll) {
-        OptionalInt pair = roll.findPairs()
-                //
-                .mapToInt(die -> die)
-                .max()
+        Optional<Integer> pair = roll.findHighestPair()
                 .stream()
                 .findFirst();
 
@@ -113,7 +106,7 @@ public class Yatzy {
 
 
         if (pair.isPresent() && threeOfAKind.isPresent()) {
-            return pair.getAsInt() * 2 + threeOfAKind.get() * 3;
+            return pair.get() * 2 + threeOfAKind.get() * 3;
 
         } else {
             return 0;
