@@ -1,6 +1,5 @@
 package yatzy;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,13 +10,7 @@ public class ScoringRules {
     }
 
     public static int yatzy(Roll roll) {
-        return roll.counts()
-                .entrySet()
-                .stream()
-                .filter(entry -> entry.getValue() == 5)
-                .findAny()
-                .map(entry -> 50)
-                .orElse(0);
+        return roll.isYatzy() ? 50 : 0;
     }
 
     public static int ones(Roll roll) {
@@ -46,9 +39,7 @@ public class ScoringRules {
 
     public static int pair(Roll roll) {
         return roll.findHighestPair()
-                .stream()
                 .map(die -> die * 2)
-                .findFirst()
                 .orElse(0);
     }
 
@@ -79,16 +70,13 @@ public class ScoringRules {
     }
 
     public static int smallStraight(Roll roll) {
-
         return roll.isSmallStraight() ? 15 : 0;
-
     }
 
 
     public static int largeStraight(Roll roll) {
         return roll.isLargeStraight() ? 20 : 0;
     }
-
 
 
     public static int fullHouse(Roll roll) {

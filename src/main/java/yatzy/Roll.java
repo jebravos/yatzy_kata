@@ -11,10 +11,6 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public record Roll(int d1, int d2, int d3, int d4, int d5) {
-    public Map<Integer, Long> counts(){
-        return Stream.of(d1, d2, d3, d4, d5)
-                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
-    }
 
     public int sumDiceValues() {
         return sumDiceValuesWhen(die -> true);
@@ -42,12 +38,12 @@ public record Roll(int d1, int d2, int d3, int d4, int d5) {
     public Stream<Integer> findFourOfAKind(){
         return findOccurrences(4);
     }
-    private Stream<Integer> findOccurrences(int x) {
+
+    public boolean isYatzy(){
         return this.counts()
                 .entrySet()
                 .stream()
-                .filter(entry -> entry.getValue() >= x)
-                .map(Map.Entry::getKey);
+                .anyMatch(entry -> entry.getValue() == 5);
     }
 
     public boolean isSmallStraight() {
@@ -60,6 +56,19 @@ public record Roll(int d1, int d2, int d3, int d4, int d5) {
         return new HashSet<>(this.counts()
                 .keySet())
                 .containsAll(List.of(2, 3, 4, 5, 6));
+    }
+
+    private Stream<Integer> findOccurrences(int x) {
+        return this.counts()
+                .entrySet()
+                .stream()
+                .filter(entry -> entry.getValue() >= x)
+                .map(Map.Entry::getKey);
+    }
+
+    Map<Integer, Long> counts(){
+        return Stream.of(d1, d2, d3, d4, d5)
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
     }
 
 }
