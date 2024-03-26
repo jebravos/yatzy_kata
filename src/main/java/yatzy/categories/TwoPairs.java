@@ -22,10 +22,10 @@ public class TwoPairs extends Category {
 
             if (pairs.size() == 2) {
                 return pairs.stream()
-                        .mapToInt(die -> die * 2)
+                        .mapToInt(die -> die * SCORE_FACTOR_PAIR)
                         .sum();
             } else {
-                return 0;
+                return SCORE_ZERO;
             }
         };
     }

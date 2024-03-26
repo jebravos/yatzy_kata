@@ -11,10 +11,10 @@ public class Chance extends Category {
     }
 
     @Override
-    Function<Roll, Integer> getScoreFunction() {
+    public Function<Roll, Integer> getScoreFunction() {
         return roll -> roll.dice()
                 .reduce(Integer::sum)
-                .orElse(0);
+                .orElse(SCORE_ZERO);
     }
 
     public static Chance of(Roll roll) {

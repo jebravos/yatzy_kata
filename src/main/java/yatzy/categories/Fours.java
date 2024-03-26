@@ -3,8 +3,12 @@ package yatzy.categories;
 import yatzy.Roll;
 
 import java.util.function.Function;
+import java.util.function.Predicate;
+
+import static yatzy.Roll.DICE_FOUR;
 
 public class Fours extends Category {
+
     public Fours(Roll roll) {
         super(roll);
     }
@@ -14,9 +18,13 @@ public class Fours extends Category {
     }
 
     @Override
-    Function<Roll, Integer> getScoreFunction() {
-        return roll -> roll.find(die -> die == 4)
+    public Function<Roll, Integer> getScoreFunction() {
+        return roll -> roll.find(diceScoringFour())
                 .reduce(Integer::sum)
-                .orElse(0);
+                .orElse(SCORE_ZERO);
+    }
+
+    private Predicate<Integer> diceScoringFour() {
+        return die -> die == DICE_FOUR;
     }
 }

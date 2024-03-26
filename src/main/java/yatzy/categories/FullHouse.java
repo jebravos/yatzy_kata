@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.function.Function;
 
 public class FullHouse extends Category{
+
     public FullHouse(Roll roll) {
         super(roll);
     }
@@ -15,7 +16,7 @@ public class FullHouse extends Category{
     }
 
     @Override
-    Function<Roll, Integer> getScoreFunction() {
+    public Function<Roll, Integer> getScoreFunction() {
         return roll -> {
             Optional<Integer> pair = roll.findHighestPair()
                     .stream()
@@ -26,10 +27,10 @@ public class FullHouse extends Category{
 
 
             if (pair.isPresent() && threeOfAKind.isPresent()) {
-                return pair.get() * 2 + threeOfAKind.get() * 3;
+                return pair.get() * SCORE_FACTOR_PAIR + threeOfAKind.get() * SCORE_FACTOR_THREE_OF_A_KIND;
 
             } else {
-                return 0;
+                return SCORE_ZERO;
             }
         };
     }

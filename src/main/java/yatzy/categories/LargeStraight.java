@@ -5,6 +5,7 @@ import yatzy.Roll;
 import java.util.function.Function;
 
 public class LargeStraight extends Category {
+
     public LargeStraight(Roll roll) {
         super(roll);
     }
@@ -14,7 +15,7 @@ public class LargeStraight extends Category {
     }
 
     @Override
-    Function<Roll, Integer> getScoreFunction() {
-        return roll -> roll.isLargeStraight() ? 20 : 0;
+    public Function<Roll, Integer> getScoreFunction() {
+        return roll -> roll.isLargeStraight() ? SCORE_TWENTY : SCORE_ZERO;
     }
 }

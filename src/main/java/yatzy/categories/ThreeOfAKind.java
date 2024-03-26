@@ -16,7 +16,8 @@ public class ThreeOfAKind extends Category {
     @Override
     Function<Roll, Integer> getScoreFunction() {
         return roll -> roll.findThreeOfAKind()
-                .mapToInt(die -> die * 3)
-                .findFirst().orElse(0);
+                .mapToInt(die -> die * SCORE_FACTOR_THREE_OF_A_KIND)
+                .findFirst()
+                .orElse(SCORE_ZERO);
     }
 }

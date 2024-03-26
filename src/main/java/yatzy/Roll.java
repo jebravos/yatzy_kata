@@ -11,6 +11,19 @@ import java.util.stream.Stream;
 
 public record Roll(int d1, int d2, int d3, int d4, int d5) {
 
+    public static final int DICE_ONE = 1;
+    public static final int DICE_TWO = 2;
+    public static final int DICE_THREE = 3;
+    public static final int DICE_FOUR = 4;
+    public static final int DICE_FIVE = 5;
+    public static final int DICE_SIX = 6;
+    public static final int PAIR = 2;
+    public static final int THREE_OF_A_KIND = 3;
+    public static final int FOUR_OF_A_KIND = 4;
+    public static final int YATZY = 5;
+    public static final List<Integer> SMALL_STRAIGHT = List.of(DICE_ONE, DICE_TWO, DICE_THREE, DICE_FOUR, DICE_FIVE);
+    public static final List<Integer> LARGE_STRAIGHT = List.of(DICE_TWO, DICE_THREE, DICE_FOUR, DICE_FIVE, DICE_SIX);
+
     public Stream<Integer> find(Predicate<Integer> condition) {
         return dice()
                 .filter(condition);
@@ -26,34 +39,33 @@ public record Roll(int d1, int d2, int d3, int d4, int d5) {
     }
 
     public Stream<Integer> findPairs() {
-        return findOccurrences(2);
+        return findOccurrences(PAIR);
     }
 
     public Stream<Integer> findThreeOfAKind() {
-        return findOccurrences(3);
+        return findOccurrences(THREE_OF_A_KIND);
     }
 
     public Stream<Integer> findFourOfAKind() {
-        return findOccurrences(4);
+        return findOccurrences(FOUR_OF_A_KIND);
     }
 
     public boolean isYatzy() {
-        return this.counts()
-                .entrySet()
-                .stream()
-                .anyMatch(entry -> entry.getValue() == 5);
+        return findOccurrences(YATZY)
+                .findAny()
+                .isPresent();
     }
 
     public boolean isSmallStraight() {
         return new HashSet<>(this.counts()
                 .keySet())
-                .containsAll(List.of(1, 2, 3, 4, 5));
+                .containsAll(SMALL_STRAIGHT);
     }
 
     public boolean isLargeStraight() {
         return new HashSet<>(this.counts()
                 .keySet())
-                .containsAll(List.of(2, 3, 4, 5, 6));
+                .containsAll(LARGE_STRAIGHT);
     }
 
     private Stream<Integer> findOccurrences(int x) {
