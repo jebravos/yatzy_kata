@@ -1,7 +1,8 @@
 package yatzy.categories;
 
 import yatzy.Roll;
-import yatzy.ScoringRules;
+
+import java.util.Optional;
 
 public class FullHouse extends Category{
     protected FullHouse(Roll roll) {
@@ -13,6 +14,19 @@ public class FullHouse extends Category{
     }
     @Override
     public Integer computeScore() {
-        return ScoringRules.fullHouse(this.roll);
+        Optional<Integer> pair = roll.findHighestPair()
+                .stream()
+                .findFirst();
+
+        Optional<Integer> threeOfAKind = roll.findThreeOfAKind()
+                .findAny();
+
+
+        if (pair.isPresent() && threeOfAKind.isPresent()) {
+            return pair.get() * 2 + threeOfAKind.get() * 3;
+
+        } else {
+            return 0;
+        }
     }
 }

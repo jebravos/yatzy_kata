@@ -22,7 +22,7 @@ class YatzyTest {
 
     @Test
     void yatzy_scores_0_when_NOT_all_dice_read_the_same_number() {
-        assertEquals(0, Yatzy.of(new Roll(6, 6, 6, 6, 3)).computeScore());;
+        assertEquals(0, Yatzy.of(new Roll(6, 6, 6, 6, 3)).computeScore());
     }
 
     @Test

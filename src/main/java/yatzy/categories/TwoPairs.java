@@ -1,7 +1,8 @@
 package yatzy.categories;
 
 import yatzy.Roll;
-import yatzy.ScoringRules;
+
+import java.util.List;
 
 public class TwoPairs extends Category{
     protected TwoPairs(Roll roll) {
@@ -13,6 +14,15 @@ public class TwoPairs extends Category{
     }
     @Override
     public Integer computeScore() {
-        return ScoringRules.twoPairs(this.roll);
+        List<Integer> pairs = roll.findPairs()
+                .toList();
+
+        if (pairs.size() == 2) {
+            return pairs.stream()
+                    .mapToInt(die -> die * 2)
+                    .sum();
+        } else {
+            return 0;
+        }
     }
 }

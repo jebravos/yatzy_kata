@@ -1,7 +1,6 @@
 package yatzy.categories;
 
 import yatzy.Roll;
-import yatzy.ScoringRules;
 
 public class Twos extends Category {
     protected Twos(Roll roll) {
@@ -13,6 +12,6 @@ public class Twos extends Category {
     }
     @Override
     public Integer computeScore() {
-        return ScoringRules.twos(this.roll);
+        return roll.sumDiceValuesWhen(die -> die == 2);
     }
 }

@@ -1,7 +1,6 @@
 package yatzy.categories;
 
 import yatzy.Roll;
-import yatzy.ScoringRules;
 
 public class Chance extends Category {
 
@@ -15,6 +14,6 @@ public class Chance extends Category {
 
     @Override
     public Integer computeScore() {
-        return ScoringRules.chance(this.roll);
+        return roll.sumDiceValues();
     }
 }
