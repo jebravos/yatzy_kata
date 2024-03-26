@@ -11,32 +11,33 @@ import java.util.stream.Stream;
 
 public record Roll(int d1, int d2, int d3, int d4, int d5) {
 
-    public Stream<Integer> findAll(){
-        return Stream.of(d1, d2, d3, d4, d5);
+    public Stream<Integer> find(Predicate<Integer> condition) {
+        return dice()
+                .filter(condition);
     }
 
-    public Stream<Integer> find(Predicate<Integer> condition){
-        return findAll()
-                .filter(condition);
+    public Stream<Integer> dice() {
+        return Stream.of(d1, d2, d3, d4, d5);
     }
 
     public Optional<Integer> findHighestPair() {
         return this.findPairs()
                 .reduce(Integer::max);
     }
-    public Stream<Integer> findPairs(){
+
+    public Stream<Integer> findPairs() {
         return findOccurrences(2);
     }
 
-    public Stream<Integer> findThreeOfAKind(){
+    public Stream<Integer> findThreeOfAKind() {
         return findOccurrences(3);
     }
 
-    public Stream<Integer> findFourOfAKind(){
+    public Stream<Integer> findFourOfAKind() {
         return findOccurrences(4);
     }
 
-    public boolean isYatzy(){
+    public boolean isYatzy() {
         return this.counts()
                 .entrySet()
                 .stream()
@@ -63,8 +64,8 @@ public record Roll(int d1, int d2, int d3, int d4, int d5) {
                 .map(Map.Entry::getKey);
     }
 
-    private Map<Integer, Long> counts(){
-        return Stream.of(d1, d2, d3, d4, d5)
+    private Map<Integer, Long> counts() {
+        return dice()
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
     }
 

@@ -2,7 +2,9 @@ package yatzy.categories;
 
 import yatzy.Roll;
 
-public class ThreeOfAKind extends Category{
+import java.util.function.Function;
+
+public class ThreeOfAKind extends Category {
     public ThreeOfAKind(Roll roll) {
         super(roll);
     }
@@ -10,9 +12,10 @@ public class ThreeOfAKind extends Category{
     public static ThreeOfAKind of(Roll roll){
         return new ThreeOfAKind(roll);
     }
+
     @Override
-    public Integer computeScore() {
-        return roll.findThreeOfAKind()
+    Function<Roll, Integer> getScoreFunction() {
+        return roll -> roll.findThreeOfAKind()
                 .mapToInt(die -> die * 3)
                 .findFirst().orElse(0);
     }

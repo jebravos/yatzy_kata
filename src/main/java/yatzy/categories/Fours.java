@@ -2,7 +2,9 @@ package yatzy.categories;
 
 import yatzy.Roll;
 
-public class Fours extends Category{
+import java.util.function.Function;
+
+public class Fours extends Category {
     public Fours(Roll roll) {
         super(roll);
     }
@@ -10,9 +12,10 @@ public class Fours extends Category{
     public static Fours of(Roll roll){
         return new Fours(roll);
     }
+
     @Override
-    public Integer computeScore() {
-        return roll.find(die -> die == 4)
+    Function<Roll, Integer> getScoreFunction() {
+        return roll -> roll.find(die -> die == 4)
                 .reduce(Integer::sum)
                 .orElse(0);
     }
