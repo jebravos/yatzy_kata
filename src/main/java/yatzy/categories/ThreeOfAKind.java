@@ -1,7 +1,6 @@
 package yatzy.categories;
 
 import yatzy.Roll;
-import yatzy.ScoringRules;
 
 public class ThreeOfAKind extends Category{
     protected ThreeOfAKind(Roll roll) {
@@ -13,6 +12,8 @@ public class ThreeOfAKind extends Category{
     }
     @Override
     public Integer computeScore() {
-        return ScoringRules.threeOfAKind(this.roll);
+        return roll.findThreeOfAKind()
+                .mapToInt(die -> die * 3)
+                .findFirst().orElse(0);
     }
 }

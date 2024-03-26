@@ -1,7 +1,6 @@
 package yatzy.categories;
 
 import yatzy.Roll;
-import yatzy.ScoringRules;
 
 public class Sixes extends Category {
     protected Sixes(Roll roll) {
@@ -13,6 +12,6 @@ public class Sixes extends Category {
     }
     @Override
     public Integer computeScore() {
-        return ScoringRules.sixes(this.roll);
+        return roll.sumDiceValuesWhen(die -> die == 6);
     }
 }

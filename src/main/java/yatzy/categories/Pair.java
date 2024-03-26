@@ -1,7 +1,6 @@
 package yatzy.categories;
 
 import yatzy.Roll;
-import yatzy.ScoringRules;
 
 public class Pair extends Category{
     protected Pair(Roll roll) {
@@ -13,6 +12,8 @@ public class Pair extends Category{
     }
     @Override
     public Integer computeScore() {
-        return ScoringRules.pair(this.roll);
+        return roll.findHighestPair()
+                .map(die -> die * 2)
+                .orElse(0);
     }
 }

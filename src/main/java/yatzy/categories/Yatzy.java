@@ -1,7 +1,6 @@
 package yatzy.categories;
 
 import yatzy.Roll;
-import yatzy.ScoringRules;
 
 public class Yatzy extends Category {
     private Yatzy(Roll roll) {
@@ -14,6 +13,6 @@ public class Yatzy extends Category {
 
     @Override
     public Integer computeScore() {
-        return ScoringRules.yatzy(this.roll);
+        return roll.isYatzy() ? 50 : 0;
     }
 }

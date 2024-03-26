@@ -1,7 +1,6 @@
 package yatzy.categories;
 
 import yatzy.Roll;
-import yatzy.ScoringRules;
 
 public class LargeStraight extends Category{
     protected LargeStraight(Roll roll) {
@@ -13,6 +12,6 @@ public class LargeStraight extends Category{
     }
     @Override
     public Integer computeScore() {
-        return ScoringRules.largeStraight(this.roll);
+        return roll.isLargeStraight() ? 20 : 0;
     }
 }
