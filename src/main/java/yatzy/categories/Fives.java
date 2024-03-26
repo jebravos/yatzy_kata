@@ -3,7 +3,7 @@ package yatzy.categories;
 import yatzy.Roll;
 
 public class Fives extends Category{
-    protected Fives(Roll roll) {
+    public Fives(Roll roll) {
         super(roll);
     }
 
@@ -12,6 +12,8 @@ public class Fives extends Category{
     }
     @Override
     public Integer computeScore() {
-        return roll.sumDiceValuesWhen(die -> die == 5);
+        return roll.find(die -> die == 5)
+                .reduce(Integer::sum)
+                .orElse(0);
     }
 }

@@ -5,28 +5,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.IntPredicate;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public record Roll(int d1, int d2, int d3, int d4, int d5) {
 
-    public int sumDiceValues() {
-        return sumDiceValuesWhen(die -> true);
+    public Stream<Integer> findAll(){
+        return Stream.of(d1, d2, d3, d4, d5);
     }
 
-    public int sumDiceValuesWhen(IntPredicate condition) {
-        return IntStream.of(d1, d2, d3, d4, d5)
-                .filter(condition)
-                .sum();
+    public Stream<Integer> find(Predicate<Integer> condition){
+        return findAll()
+                .filter(condition);
     }
 
     public Optional<Integer> findHighestPair() {
         return this.findPairs()
                 .reduce(Integer::max);
     }
-
     public Stream<Integer> findPairs(){
         return findOccurrences(2);
     }

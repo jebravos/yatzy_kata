@@ -3,7 +3,7 @@ package yatzy.categories;
 import yatzy.Roll;
 
 public class SmallStraight extends Category {
-    protected SmallStraight(Roll roll) {
+    public SmallStraight(Roll roll) {
         super(roll);
     }
 

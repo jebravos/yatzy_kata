@@ -5,7 +5,7 @@ import yatzy.Roll;
 import java.util.Optional;
 
 public class FullHouse extends Category{
-    protected FullHouse(Roll roll) {
+    public FullHouse(Roll roll) {
         super(roll);
     }
 

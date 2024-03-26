@@ -14,6 +14,8 @@ public class Chance extends Category {
 
     @Override
     public Integer computeScore() {
-        return roll.sumDiceValues();
+        return roll.findAll()
+                .reduce(Integer::sum)
+                .orElse(0);
     }
 }

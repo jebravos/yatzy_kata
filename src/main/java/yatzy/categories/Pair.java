@@ -3,7 +3,7 @@ package yatzy.categories;
 import yatzy.Roll;
 
 public class Pair extends Category{
-    protected Pair(Roll roll) {
+    public Pair(Roll roll) {
         super(roll);
     }
 
