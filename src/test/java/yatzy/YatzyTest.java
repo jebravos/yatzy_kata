@@ -2,114 +2,136 @@ package yatzy;
 
 
 import org.junit.jupiter.api.Test;
+import yatzy.categories.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class YatzyTest {
 
     @Test
     void chance_scores_sum_of_all_dice() {
-        int expected = 15;
-        int actual = Yatzy.chance(2, 3, 4, 5, 1);
-        assertEquals(expected, actual);
-        assertEquals(16, Yatzy.chance(3, 3, 4, 5, 1));
+        assertEquals(15, Chance.of(new Roll(2, 3, 4, 5, 1)).computeScore());
+        assertEquals(16, Chance.of(new Roll(3, 3, 4, 5, 1)).computeScore());
     }
 
     @Test
-    void yatzy_scores_50() {
-        int expected = 50;
-        int actual = Yatzy.yatzy(4, 4, 4, 4, 4);
-        assertEquals(expected, actual);
-        assertEquals(50, Yatzy.yatzy(6, 6, 6, 6, 6));
-        assertEquals(0, Yatzy.yatzy(6, 6, 6, 6, 3));
+    void yatzy_scores_50_when_all_dice_read_the_same_number() {
+        assertEquals(50, Yatzy.of(new Roll(4, 4, 4, 4, 4)).computeScore());
+        assertEquals(50, Yatzy.of(new Roll(6, 6, 6, 6, 6)).computeScore());
     }
 
     @Test
-    void test_1s() {
-        assertTrue(Yatzy.ones(1, 2, 3, 4, 5) == 1);
-        assertEquals(2, Yatzy.ones(1, 2, 1, 4, 5));
-        assertEquals(0, Yatzy.ones(6, 2, 2, 4, 5));
-        assertEquals(4, Yatzy.ones(1, 2, 1, 1, 1));
+    void yatzy_scores_0_when_NOT_all_dice_read_the_same_number() {
+        assertEquals(0, Yatzy.of(new Roll(6, 6, 6, 6, 3)).computeScore());
     }
 
     @Test
-    void test_2s() {
-        assertEquals(4, Yatzy.twos(1, 2, 3, 2, 6));
-        assertEquals(10, Yatzy.twos(2, 2, 2, 2, 2));
+    void ones_should_score_the_sum_of_all_dice_reading_1() {
+        assertEquals(1, Ones.of(new Roll(1, 2, 3, 4, 5)).computeScore());
+        assertEquals(2, Ones.of(new Roll(1, 2, 1, 4, 5)).computeScore());
+        assertEquals(4, Ones.of(new Roll(1, 2, 1, 1, 1)).computeScore());
+        assertEquals(0, Ones.of(new Roll(6, 2, 2, 4, 5)).computeScore());
     }
 
     @Test
-    void test_threes() {
-        assertEquals(6, Yatzy.threes(1, 2, 3, 2, 3));
-        assertEquals(12, Yatzy.threes(2, 3, 3, 3, 3));
+    void twos_should_score_the_sum_of_all_dice_reading_2() {
+        assertEquals(4, Twos.of(new Roll(1, 2, 3, 2, 6)).computeScore());
+        assertEquals(10, Twos.of(new Roll(2, 2, 2, 2, 2)).computeScore());
+        assertEquals(0, Twos.of(new Roll(1, 1, 3, 3, 6)).computeScore());
     }
 
     @Test
-    void fours_test() {
-        assertEquals(12, new Yatzy(4, 4, 4, 5, 5).fours());
-        assertEquals(8, new Yatzy(4, 4, 5, 5, 5).fours());
-        assertEquals(4, new Yatzy(4, 5, 5, 5, 5).fours());
+    void threes_should_score_the_sum_of_all_dice_reading_3() {
+        assertEquals(6, Threes.of(new Roll(1, 2, 3, 2, 3)).computeScore());
+        assertEquals(12, Threes.of(new Roll(2, 3, 3, 3, 3)).computeScore());
+        assertEquals(0, Threes.of(new Roll(1, 1, 1, 2, 6)).computeScore());
     }
 
     @Test
-    void fives() {
-        assertEquals(10, new Yatzy(4, 4, 4, 5, 5).fives());
-        assertEquals(15, new Yatzy(4, 4, 5, 5, 5).fives());
-        assertEquals(20, new Yatzy(4, 5, 5, 5, 5).fives());
+    void fours_should_score_the_sum_of_all_dice_reading_4() {
+        assertEquals(12, Fours.of(new Roll(4, 4, 4, 5, 5)).computeScore());
+        assertEquals(8, Fours.of(new Roll(4, 4, 5, 5, 5)).computeScore());
+        assertEquals(4, Fours.of(new Roll(4, 5, 5, 5, 5)).computeScore());
+        assertEquals(0, Fours.of(new Roll(1, 5, 5, 5, 5)).computeScore());
     }
 
     @Test
-    void sixes_test() {
-        assertEquals(0, new Yatzy(4, 4, 4, 5, 5).sixes());
-        assertEquals(6, new Yatzy(4, 4, 6, 5, 5).sixes());
-        assertEquals(18, new Yatzy(6, 5, 6, 6, 5).sixes());
+    void fives_should_score_the_sum_of_all_dice_reading_5() {
+        assertEquals(10, Fives.of(new Roll(4, 4, 4, 5, 5)).computeScore());
+        assertEquals(15, Fives.of(new Roll(4, 4, 5, 5, 5)).computeScore());
+        assertEquals(20, Fives.of(new Roll(4, 5, 5, 5, 5)).computeScore());
+        assertEquals(0, Fives.of(new Roll(4, 1, 2, 3, 6)).computeScore());
     }
 
     @Test
-    void one_pair() {
-        assertEquals(6, Yatzy.score_pair(3, 4, 3, 5, 6));
-        assertEquals(10, Yatzy.score_pair(5, 3, 3, 3, 5));
-        assertEquals(12, Yatzy.score_pair(5, 3, 6, 6, 5));
+    void sixes_should_score_the_sum_of_all_dice_reading_6() {
+        assertEquals(6, Sixes.of(new Roll(4, 4, 6, 5, 5)).computeScore());
+        assertEquals(18, Sixes.of(new Roll(6, 5, 6, 6, 5)).computeScore());
+        assertEquals(0, Sixes.of(new Roll(4, 4, 4, 5, 5)).computeScore());
     }
 
     @Test
-    void two_Pair() {
-        assertEquals(16, Yatzy.two_pair(3, 3, 5, 4, 5));
-        assertEquals(16, Yatzy.two_pair(3, 3, 5, 5, 5));
+    void pair_scores_the_sum_of_the_two_highest_matching_dice() {
+        assertEquals(6, Pair.of(new Roll(3, 4, 3, 5, 6)).computeScore());
+        assertEquals(10, Pair.of(new Roll(5, 3, 3, 3, 5)).computeScore());
+        assertEquals(12, Pair.of(new Roll(5, 3, 6, 6, 5)).computeScore());
+        assertEquals(0, Pair.of(new Roll(5, 3, 1, 6, 2)).computeScore());
     }
 
     @Test
-    void three_of_a_kind() {
-        assertEquals(9, Yatzy.three_of_a_kind(3, 3, 3, 4, 5));
-        assertEquals(15, Yatzy.three_of_a_kind(5, 3, 5, 4, 5));
-        assertEquals(9, Yatzy.three_of_a_kind(3, 3, 3, 3, 5));
+    void two_pair_scores_the_sum_of_matching_dice() {
+        assertEquals(16, TwoPairs.of(new Roll(3, 3, 5, 4, 5)).computeScore());
+        assertEquals(16, TwoPairs.of(new Roll(3, 3, 5, 5, 5)).computeScore());
+        assertEquals(0, TwoPairs.of(new Roll(3, 2, 5, 1, 6)).computeScore());
     }
 
     @Test
-    void four_of_a_knd() {
-        assertEquals(12, Yatzy.four_of_a_kind(3, 3, 3, 3, 5));
-        assertEquals(20, Yatzy.four_of_a_kind(5, 5, 5, 4, 5));
-        assertEquals(9, Yatzy.three_of_a_kind(3, 3, 3, 3, 3));
+    void three_of_a_kind_scores_the_sum_of_matching_dice() {
+        assertEquals(9, ThreeOfAKind.of(new Roll(3, 3, 3, 4, 5)).computeScore());
+        assertEquals(15, ThreeOfAKind.of(new Roll(5, 3, 5, 4, 5)).computeScore());
+        assertEquals(9, ThreeOfAKind.of(new Roll(3, 3, 3, 3, 5)).computeScore());
+        assertEquals(0, ThreeOfAKind.of(new Roll(3, 2, 1, 3, 5)).computeScore());
     }
 
     @Test
-    void smallStraight() {
-        assertEquals(15, Yatzy.smallStraight(1, 2, 3, 4, 5));
-        assertEquals(15, Yatzy.smallStraight(2, 3, 4, 5, 1));
-        assertEquals(0, Yatzy.smallStraight(1, 2, 2, 4, 5));
+    void four_of_a_kind_scores_the_sum_of_matching_dice() {
+        assertEquals(12, FourOfAKind.of(new Roll(3, 3, 3, 3, 5)).computeScore());
+        assertEquals(20, FourOfAKind.of(new Roll(5, 5, 5, 4, 5)).computeScore());
+        assertEquals(0, FourOfAKind.of(new Roll(3, 3, 3, 5, 2)).computeScore());
     }
 
     @Test
-    void largeStraight() {
-        assertEquals(20, Yatzy.largeStraight(6, 2, 3, 4, 5));
-        assertEquals(20, Yatzy.largeStraight(2, 3, 4, 5, 6));
-        assertEquals(0, Yatzy.largeStraight(1, 2, 2, 4, 5));
+    void smallStraight_scores_15() {
+        assertEquals(15, SmallStraight.of(new Roll(1, 2, 3, 4, 5)).computeScore());
+        assertEquals(15, SmallStraight.of(new Roll(2, 3, 4, 5, 1)).computeScore());
+
     }
 
     @Test
-    void fullHouse() {
-        assertEquals(18, Yatzy.fullHouse(6, 2, 2, 2, 6));
-        assertEquals(0, Yatzy.fullHouse(2, 3, 4, 5, 6));
+    void smallStraight_scores_0_when_no_small_straight() {
+        assertEquals(0, SmallStraight.of(new Roll(1, 2, 2, 4, 5)).computeScore());
+    }
+
+    @Test
+    void largeStraight_scores_20() {
+        assertEquals(20, LargeStraight.of(new Roll(6, 2, 3, 4, 5)).computeScore());
+        assertEquals(20, LargeStraight.of(new Roll(2, 3, 4, 5, 6)).computeScore());
+    }
+
+    @Test
+    void largeStraight_scores_0_when_no_large_straight() {
+        assertEquals(0, LargeStraight.of(new Roll(1, 2, 2, 4, 5)).computeScore());
+    }
+
+    @Test
+    void fullHouse_scores_the_sum_of_all_dice() {
+        assertEquals(18, FullHouse.of(new Roll(6, 2, 2, 2, 6)).computeScore());
+
+    }
+
+    @Test
+    void fullHouse_scores_0_when_no_fullHouse() {
+        assertEquals(0, FullHouse.of(new Roll(2, 3, 4, 5, 6)).computeScore());
+
     }
 }
