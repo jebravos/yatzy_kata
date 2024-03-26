@@ -3,7 +3,7 @@ package yatzy.categories;
 import yatzy.Roll;
 
 public class FourOfAKind extends Category{
-    protected FourOfAKind(Roll roll) {
+    public FourOfAKind(Roll roll) {
         super(roll);
     }
 

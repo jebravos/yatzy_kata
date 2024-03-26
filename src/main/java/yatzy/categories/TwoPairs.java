@@ -5,7 +5,7 @@ import yatzy.Roll;
 import java.util.List;
 
 public class TwoPairs extends Category{
-    protected TwoPairs(Roll roll) {
+    public TwoPairs(Roll roll) {
         super(roll);
     }
 

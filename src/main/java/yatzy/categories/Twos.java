@@ -3,7 +3,7 @@ package yatzy.categories;
 import yatzy.Roll;
 
 public class Twos extends Category {
-    protected Twos(Roll roll) {
+    public Twos(Roll roll) {
         super(roll);
     }
 
@@ -12,6 +12,8 @@ public class Twos extends Category {
     }
     @Override
     public Integer computeScore() {
-        return roll.sumDiceValuesWhen(die -> die == 2);
+        return roll.find(die -> die == 2)
+                .reduce(Integer::sum)
+                .orElse(0);
     }
 }
