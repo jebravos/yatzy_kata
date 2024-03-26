@@ -66,7 +66,7 @@ public record Roll(int d1, int d2, int d3, int d4, int d5) {
                 .map(Map.Entry::getKey);
     }
 
-    Map<Integer, Long> counts(){
+    private Map<Integer, Long> counts(){
         return Stream.of(d1, d2, d3, d4, d5)
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
     }
